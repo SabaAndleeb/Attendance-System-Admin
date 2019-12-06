@@ -1,0 +1,45 @@
+<div class="main-content">
+    <div class="container-fluid">
+  
+      <div class="row">
+        <div class="col-md-6"></div>
+        <div class="col-md-6 text-right">
+            <a class="btn btn-primary" routerLink="/add-course">Add Course</a>
+        </div>
+        <div class="col-md-12">
+              <div class="card">
+                  <div class="card-header card-header-danger">
+                      <h4 class="card-title ">Courses</h4>
+                      <p class="card-category"> All the courses offered in this institute are listed below.</p>
+                  </div>
+                  <div class="card-body">
+                      <div class="table-responsive">
+                          <table class="table" *ngIf="courses | async">
+                              <thead class=" text-primary">
+                                  <th>
+                                     ID
+                                  </th>
+                                  <th>
+                                    Course Name
+                                  </th>
+  
+                              </thead>
+                              <tbody>
+                                  <tr *ngFor="let course of (courses | async)?.response; let i=index;">
+                                      <td>
+                                          {{ i + 1}}
+                                      </td>
+                                      <td>
+                                          {{ course?.name }}
+                                      </td>
+                                  </tr>
+                              </tbody>
+                          </table>
+                      </div>
+                  </div>
+              </div>
+          </div>        
+      </div>
+    </div>
+  </div>
+  

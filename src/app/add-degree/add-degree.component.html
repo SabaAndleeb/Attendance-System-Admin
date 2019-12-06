@@ -1,0 +1,28 @@
+<div class="main-content">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-12" *ngIf="alertData">
+          <app-alert-box [alertData]="alertData"></app-alert-box>
+        </div>
+        <div class="col-md-12">
+            <div class="card">
+              <div class="card-header card-header-primary">
+                <h4 class="card-title ">New Degree</h4>               
+              </div>
+              <div class="card-body">
+                <div class="table-responsive">
+                    <form [formGroup]="form">
+                      <div class="form-group">
+                        <label for="firstName" class="text-dark">Degree Name</label>
+                        <input type="text" class="form-control" formControlName="name" placeholder="Enter degree name">
+                      </div>
+                      <button type="submit" class="btn btn-primary" [disabled]="!form.valid" (click)="addCourse()">Add</button>
+                      <!-- <pre>{{ form.value | json }}</pre> -->
+                    </form>
+                </div>
+              </div>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>

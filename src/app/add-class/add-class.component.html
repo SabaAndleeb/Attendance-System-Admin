@@ -1,0 +1,66 @@
+<div class="main-content">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-12">
+          <app-alert-box [alertData]="alertData"></app-alert-box>
+        </div>
+        <div class="col-md-12">
+            <div class="card">
+              <div class="card-header card-header-primary">
+                  <h4 class="card-title ">New Class</h4>               
+              </div>
+              <div class="card-body">
+                <div class="table-responsive">
+                    <form [formGroup]="form">
+
+                       <div class="form-group">
+                          <label for="degree" class="text-dark">Degree</label>
+                          <select class="form-control" formControlName="degree">
+                            <option *ngFor="let degree of (degrees | async)?.response let i=index;" [selected]="degrees[0]?.name" [value]="degree?._id">{{ degree?.name}}</option>
+                          </select>
+                        </div>
+    
+    
+                        <div class="form-group">
+                          <label for="programme" class="text-dark">Programme</label>
+                          <select class="form-control" formControlName="programme">
+                          <option *ngFor="let programme of (programmes | async)?.response" [value]="programme?._id" [selected]="(programmes | async)?.response[0].name">{{ programme?.name}}</option>
+                          </select>
+                        </div>
+  
+                       
+                        <div formArrayName="courses" *ngFor="let course of form.get('courses').controls; let i=index;">
+                          <div [formGroupName]="i">
+                            <div class="form-group">
+                              <label for="degree" class="text-dark">Course</label>
+                              <select class="form-control" formControlName="course">
+                                <option *ngFor="let course of (courses | async)?.response let i=index;" [selected]="(courses | async)?.response[0].name" [value]="course?._id">{{ course?.name}}</option>
+                              </select>
+                            </div>
+      
+      
+                            <div class="form-group">
+                              <label for="teacher" class="text-dark">Teacher</label>
+                              <select class="form-control" formControlName="teacher">
+                              <option *ngFor="let teacher of (teachers | async)?.response" [value]="teacher?._id" [selected]="(teachers | async)?.response[0].firstName + ' ' + (teachers | async)?.response[0].lastName">
+                                {{ teacher?.firstName + ' ' + teacher?.lastName }}</option>
+                              </select>
+                            </div>
+
+                          </div>  
+
+                        </div>  
+
+                        
+                        <pre>{{ form.value | json }}</pre>
+                        
+                        <button type="submit" class="btn btn-primary" [disabled]="!form.valid">Add</button>
+                      
+                      </form>
+                </div>
+              </div>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>

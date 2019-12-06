@@ -1,0 +1,35 @@
+<div class="main-content">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card">
+            <div class="card-header card-header-danger">
+                <h4 class="card-title ">Programmes Offered in {{ params?.name }}</h4>
+                <p class="card-category"> </p>
+            </div>
+            <div class="card-body">
+              <p *ngIf="(programmes | async)?.length > 0"> Following are the programmes offered under this degree.</p>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-3 col-md-6 col-sm-6" *ngFor="let programme of programmes | async; let i=index;">
+                <div class="card card-stats">
+                    <div class="card-header card-header-{{ programme.class }}  card-header-icon">
+                        <div class="card-icon">
+                            <i class="material-icons">menu_book</i>
+                        </div>
+                        <h3 class="card-title">{{ programme.name }}</h3>
+                    </div>
+                    <div class="card-footer">
+                        <div class="stats">
+                            <a href="javascript:void(0)" class="text-primary">CheckOut Programme classes.</a >
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

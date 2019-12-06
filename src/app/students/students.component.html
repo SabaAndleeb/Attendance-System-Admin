@@ -1,0 +1,57 @@
+<div class="main-content">
+  <div class="container-fluid">
+
+    <div class="row">
+        <div class="col-md-6"></div>
+        <div class="col-md-6 text-right">
+            <a class="btn btn-primary" routerLink="/add-student">Add Student</a>
+        </div>
+
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header card-header-danger">
+                    <h4 class="card-title ">Students</h4>
+                    <p class="card-category"> All the students of this institute are listed below.</p>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table" *ngIf="students | async">
+                            <thead class=" text-primary">
+                                <th>
+                                    Reg Num
+                                </th>
+                                <th>
+                                    Name
+                                </th>
+                                <th>
+                                    Degree 
+                                </th>
+                                <th>
+                                   Programme 
+                                </th>
+
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let student of (students | async)?.response; let i=index;">
+                                    <td>
+                                        {{ student?.registrationNum}}
+                                    </td>
+                                    <td>
+                                        {{ student?.firstName + ' ' + student?.lastName }}
+                                    </td>
+                                    <td>
+                                        {{ student?.classInfo?.degree?.name}}
+                                    </td>
+                                    <td>
+                                        {{ student?.classInfo?.programme?.name}}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>        
+    </div>
+  </div>
+</div>
