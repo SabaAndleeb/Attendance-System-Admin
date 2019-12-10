@@ -1,3 +1,42 @@
-<p>
-  add-programme works!
-</p>
+<div class="main-content">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-12" *ngIf="alertData">
+        <app-alert-box [alertData]="alertData"></app-alert-box>
+      </div>
+      <div class="col-md-12">
+          <div class="card">
+            <div class="card-header card-header-primary">
+              <h4 class="card-title ">New Programme for {{ params?.name }}</h4>               
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+                  <form [formGroup]="form">
+                    <div class="form-group">
+                      <label for="name" class="text-dark">Programme Name</label>
+                      <input type="text" class="form-control" formControlName="name" placeholder="Enter programme name">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="text-dark">Duration</label>
+                        <input type="number" class="form-control" formControlName="duration" placeholder="Enter pduration in years">
+                      </div>
+
+                      <div class="form-group">
+                        <label class="text-dark">Semester System</label>
+                        <select class="form-control" (change)="onChange($event)">
+                          <option value="yes" selected>Yes</option>
+                          <option value="no">No</option>
+                        </select>
+                      </div>
+                    
+                    <button type="submit" class="btn btn-primary" [disabled]="!form.valid" (click)="addProgramme()">Add</button>
+                    <!-- <pre>{{ form.value | json }}</pre> -->
+                  </form>
+              </div>
+            </div>
+          </div>
+      </div>
+    </div>
+  </div>
+</div>

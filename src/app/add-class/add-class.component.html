@@ -1,7 +1,7 @@
 <div class="main-content">
     <div class="container-fluid">
       <div class="row">
-        <div class="col-md-12">
+        <div class="col-md-12" *ngIf="alertData">
           <app-alert-box [alertData]="alertData"></app-alert-box>
         </div>
         <div class="col-md-12">
@@ -27,36 +27,107 @@
                           <option *ngFor="let programme of (programmes | async)?.response" [value]="programme?._id" [selected]="(programmes | async)?.response[0].name">{{ programme?.name}}</option>
                           </select>
                         </div>
+
+                        
+                        <div class="form-group">
+                          <label class="text-dark">Section (Optional)</label>
+                          <input type="text" class="form-control" formControlName="section" aria-describedby="sectionHelp" placeholder="Enter section">
+                          <small id="sectionHelp" class="form-text text-muted">If this class has section, Enter section.</small>
+                        </div>
+
+                        <div class="form-group">
+                          <label class="text-dark">Part (Optional)</label>
+                          <input type="text" class="form-control" formControlName="part" placeholder="Enter part">
+                        </div>
+
+                        <div class="form-group">
+                          <label class="text-dark">Year</label>
+                          <input type="text" class="form-control" formControlName="year" placeholder="Enter year (2019)">
+                        </div>
   
-                       
-                        <div formArrayName="courses" *ngFor="let course of form.get('courses').controls; let i=index;">
-                          <div [formGroupName]="i">
-                            <div class="form-group">
-                              <label for="degree" class="text-dark">Course</label>
-                              <select class="form-control" formControlName="course">
-                                <option *ngFor="let course of (courses | async)?.response let i=index;" [selected]="(courses | async)?.response[0].name" [value]="course?._id">{{ course?.name}}</option>
-                              </select>
+                        <div class="row">
+                          <div class="col-6"></div>
+                          <div class="col-6 text-right">
+                            <button class="btn btn-primary" (click)="addCourse()">Add Course</button>
+                          </div>
+                        </div>
+
+                        <div class="border mt-1" formArrayName="courses" *ngFor="let course of form.get('courses').controls; let i=index">
+                           
+                          <!-- Angular assigns array index as group name by default 0, 1, 2, ... -->
+                            <div class="form-row p-5" [formGroupName]="i">
+                                <!-- Course -->
+                                <div class="col-5">                                   
+                                  <select class="form-control" formControlName="course">
+                                    <option *ngFor="let course of courses; let i=index;" [selected]="courses[0]?.name" [value]="course?._id">{{ course?.name }}</option>
+                                  </select>
+                                </div>
+                                
+                                <!--Teacher-->
+                                <div class="col-5">                                 
+                                  <select class="form-control" formControlName="teacher">
+                                    <option *ngFor="let teacher of teachers" [value]="teacher?._id" [selected]="teachers[0]?.firstName + ' ' + teachers[0]?.lastName">
+                                      {{ teacher?.firstName + ' ' + teacher?.lastName }}</option>
+                                  </select>
+                                </div>
+                                
+                                <div class="col-2 text-right">
+                                  <button class="btn btn-danger" (click)="removeCourse(i)">Remove</button>
+                                </div>
                             </div>
-      
-      
-                            <div class="form-group">
-                              <label for="teacher" class="text-dark">Teacher</label>
-                              <select class="form-control" formControlName="teacher">
-                              <option *ngFor="let teacher of (teachers | async)?.response" [value]="teacher?._id" [selected]="(teachers | async)?.response[0].firstName + ' ' + (teachers | async)?.response[0].lastName">
-                                {{ teacher?.firstName + ' ' + teacher?.lastName }}</option>
-                              </select>
-                            </div>
+                        </div>
 
-                          </div>  
+                        <div class="row">
+                          <div class="col-md-12">
+                              <div class="card">
+                                  <div class="card-header card-header-primary">
+                                      <h4 class="card-title ">Students</h4>
+                                      <p class="card-category"> Select students from the following list for this class.</p>
+                                  </div>
+                                  <div class="card-body">
+                                      <div class="table-responsive">
+                                          <table class="table text-center" *ngIf="students | async">
+                                              <thead class=" text-primary">
+                                                  <th>
+                                                    ID
+                                                  </th>
+                                                  <th>
+                                                    Name 
+                                                  </th>
+                                                  <th>
+                                                   Registration Num 
+                                                  </th>
 
-                        </div>  
+                                                  <th>
+                                                    Add/Remove
+                                                  </th>                  
+                                              </thead>
 
-                        
-                        <pre>{{ form.value | json }}</pre>
-                        
-                        <button type="submit" class="btn btn-primary" [disabled]="!form.valid">Add</button>
-                      
-                      </form>
+                                              <tbody class="text-center">
+                                                  <tr formArrayName="students" *ngFor="let student of (students | async)?.response; let i=index;">
+                                                      <td>
+                                                          {{ i + 1 }}
+                                                      </td>
+                                                      <td>
+                                                          {{ student?.firstName + ' ' + student?.lastName }}
+                                                      </td>
+                                                      <td>
+                                                          {{ student?.registrationNum }}
+                                                      </td>
+                                                      <td>
+                                                        <input type="checkbox" [value]="student?._id" (change)="onCheckChange($event)">
+                                                    </td>
+                                                  </tr>
+                                              </tbody>
+                                          </table>
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>        
+                      </div>
+                      <!-- <pre>{{ form.value | json }}</pre> -->
+                      <button type="submit" class="btn btn-primary text-end" [disabled]="!form.valid">Add</button>
+                    </form>
                 </div>
               </div>
             </div>

@@ -1,7 +1,7 @@
 <div class="main-content">
     <div class="container-fluid">
       <div class="row">
-        <div class="col-md-12">
+        <div class="col-md-12" *ngIf="alertData">
           <app-alert-box [alertData]="alertData"></app-alert-box>
         </div>
         <div class="col-md-12">
@@ -23,18 +23,13 @@
                         </div>
   
                         <div class="form-group">
-                            <label for="userName" class="text-dark">User Name</label>
-                            <input type="text" class="form-control" formControlName="userName" placeholder="Enter user name">
-                          </div>
-  
-                        <div class="form-group">
                           <label for="email" class="text-dark">Email</label>
                           <input type="email" class="form-control" formControlName="email" placeholder="Enter email">
                         </div>
   
                         <div class="form-group">
                           <label for="birthDate" class="text-dark">Birth Date</label>
-                          <input type="text" class="form-control" formControlName="birthDate" placeholder="Enter birth date">
+                          <input type="date" class="form-control" formControlName="birthDate" placeholder="Enter birth date">
                         </div>
   
                         <div class="form-group">
@@ -75,7 +70,7 @@
                             <div class="form-group">
                               <label for="city" class="text-dark">City</label>
                               <select class="form-control" formControlName="city">
-                                <option value="islamabad" selected>Islamabad</option>
+                                <option value="islamabad">Islamabad</option>
                                 <option value="rawalpindi">RawalPindi</option>
                               </select>
                             </div>
@@ -88,9 +83,9 @@
   
                           </div>  
                         
-                        <pre>{{ form.value | json }}</pre>
+                        <!-- <pre>{{ form.value | json }}</pre> -->
                         
-                        <button type="submit" class="btn btn-primary" [disabled]="!form.valid">Add</button>
+                        <button type="submit" class="btn btn-primary" [disabled]="!form.valid"  (click)="addStudent()">Add</button>
                       
                       </form>
                 </div>

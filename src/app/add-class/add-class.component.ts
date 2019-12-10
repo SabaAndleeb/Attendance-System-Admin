@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, Validators, FormGroup, FormControl } from '@angular/forms';
+import { FormBuilder, Validators, FormGroup, FormControl, FormArray } from '@angular/forms';
 import { OperationsService } from 'app/services/operations.service';
-import { Observable } from 'rxjs';
+import { Observable, forkJoin } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { ContentObserver } from '@angular/cdk/observers';
 
 @Component({
   selector: 'app-add-class',
@@ -10,90 +12,142 @@ import { Observable } from 'rxjs';
 })
 export class AddClassComponent implements OnInit {
 
-  private form : FormGroup;
-  private degrees : Observable<any>;
-  private programmes : Observable<any>;
-  private teachers : Observable<any>;
-  private courses : Observable<any>;
-  private alertData : any;
+  private form: FormGroup;
+  private degrees: Observable<any>;
+  private programmes: Observable<any>;
+  private students: Observable<any>;
+  private teachers: Array<any>;
+  private courses: Array<any>;
+  private alertData: any;
 
-  constructor(private formBuilder: FormBuilder,  
-              private operationsService: OperationsService) { }
+  constructor(private formBuilder: FormBuilder,
+    private operationsService: OperationsService) { }
 
   ngOnInit() {
     this.form = this.formBuilder.group({
-      degree : ['' , Validators.required],
-      programme : ['' , Validators.required],
-      courses : this.formBuilder.array([ this.addCourses() ]),
-      students : this.formBuilder.array([ this.addStudentToForm() ]),  
-      section : '',
-      part : 0,
-      semester : 0, 
+      degree: ['', Validators.required],
+      programme: ['', Validators.required],
+      courses: this.formBuilder.array( [] ),
+      students: this.formBuilder.array([]),
+      section: '',
+      part: 0,
+      semester: 0,
+      year : ['', Validators.required]
     });
+    
+    
+    this.getCoursesData();
+
+    this.getStudents();
+
     this.getDegrees();
-    this.getcoursesData();
-    this.form.get('degree').valueChanges.subscribe((selectedDegree : any) => {
+    this.form.get('degree').valueChanges.subscribe((selectedDegree: any) => {
       this.getDegreeProgrammes(selectedDegree);
     });
   }
 
-  addStudentToForm(){
+  addStudentToForm() {
     return new FormControl('', Validators.required);
   }
 
-  addCourses(){
-    return this.formBuilder.group({
-      course : ['' , Validators.required],
-      teacher : ['' , Validators.required],
-    })
+  addCourse() {
+    let courses = <FormArray>this.form.controls.courses;
+    courses.push(
+      this.formBuilder.group({
+        course:  [this.courses[0]._id, Validators.required],
+        teacher: [this.teachers[0]._id, Validators.required],
+      })
+    );
   }
 
-  getDegrees(){
+  removeCourse(index){
+    let courses = <FormArray>this.form.controls.courses;
+    courses.removeAt(index);
+  }
+
+  getDegrees() {
     this.degrees = this.operationsService.getOperation('degree');
-    this.degrees.subscribe((result : any) => {
-      if(result.response && result.response.length > 0){
+    this.degrees.subscribe((result: any) => {
+      if (result.response && result.response.length > 0) {
         const degreeId = result.response[0]._id;
         this.form.get('degree').patchValue(degreeId);
         this.getDegreeProgrammes(degreeId);
       }
-    });  
+    });
   }
 
-  getcoursesData(){
-    this.teachers = this.operationsService.getOperation('teachers');    
-    this.courses =  this.operationsService.getOperation('courses');    
+  getCoursesData() {
+    const teachers = this.operationsService.getOperation('teachers');
+    const courses = this.operationsService.getOperation('courses');
+    forkJoin([teachers , courses]).subscribe( (response : any ) => {
+      if(response && response.length > 0){
+        this.teachers = response[0].response;
+        this.courses  = response[1].response;
+        this.addCourse();
+      }
+    });    
   }
 
-  getDegreeProgrammes(degreeId){
-    this.programmes = this.operationsService.getOperation('degreeProgrammes/'+ degreeId);
-    this.degrees.subscribe((result : any) => {
-      if(result.response && result.response.length > 0)
+  getStudents(){
+    this.students = this.operationsService.getOperation('students');    
+  }
+
+  onCheckChange(event) {
+  const formArray: FormArray = this.form.get('students') as FormArray;
+
+  /* Selected */
+  if(event.target.checked){
+    // Add a new control in the arrayForm
+    formArray.push(new FormControl(event.target.value));
+  }
+  /* unselected */
+  else{
+    // find the unselected element
+    let i: number = 0;
+
+    formArray.controls.forEach((ctrl: FormControl) => {
+      if(ctrl.value == event.target.value) {
+        // Remove the unselected element from the arrayForm
+        formArray.removeAt(i);
+        return;
+      }
+
+      i++;
+    });
+  }
+}
+
+ 
+
+  getDegreeProgrammes(degreeId) {
+    this.programmes = this.operationsService.getOperation('degreeProgrammes/' + degreeId);
+    this.degrees.subscribe((result: any) => {
+      if (result.response && result.response.length > 0)
         this.form.get('programme').patchValue(result.response[0]._id);
       else
         this.form.get('programme').patchValue("");
-    });  
+    });
   }
 
-
-  addStudent(){
-    const newCourse = this.operationsService.postOperation('add-student' , this.form.value);
-    newCourse.subscribe((result : any) => {
-      console.log('Student Added Response', result);
+  addClass() {
+    const newClass = this.operationsService.postOperation('add-student', this.form.value);
+    newClass.subscribe((result: any) => {
+      console.log('Class Added Response', result);
       this.alertData = {};
-      if(result.success){
+      if (result.success) {
         this.alertData.class = 'alert-success';
-        this.alertData.message = 'Student added successfully.';
+        this.alertData.message = 'Class added successfully.';
       }
       else {
         this.alertData.class = 'alert-danger';
         this.alertData.message = 'Sorry! something went wrong.';
       }
       setTimeout(() => {
-        this.alertData = {};
-        if(result.success)
+        this.alertData = undefined;
+        if (result.success)
           this.form.reset();
       }, 3000);
-    });  
+    });
   }
 
 }

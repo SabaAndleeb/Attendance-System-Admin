@@ -11,6 +11,7 @@ import { AddCourseComponent } from 'app/add-course/add-course.component';
 import { AddClassComponent } from 'app/add-class/add-class.component';
 import { AddDegreeComponent } from 'app/add-degree/add-degree.component';
 import { AddProgrammeComponent } from 'app/add-programme/add-programme.component';
+import { AddTeacherComponent } from 'app/add-teacher/add-teacher.component';
 
 export const AdminLayoutRoutes: Routes = [
     { path : 'dashboard',      component: DashboardComponent },
@@ -19,11 +20,12 @@ export const AdminLayoutRoutes: Routes = [
     { path : 'classes', component  : ClassesListComponent },
     { path : 'add-class', component : AddClassComponent },
     { path : 'teachers', component : TeachersComponent },
+    { path : 'add-teacher', component : AddTeacherComponent },
     { path : 'courses' , component : CoursesComponent  },
     { path : 'add-course', component : AddCourseComponent },
     { path : 'degreeProgrammes/:id/:name' , component : ProgrammesComponent },
     { path : 'attendance-result/:id' , component : AttednaceResultComponent },
     { path : 'add-degree', component : AddDegreeComponent },
-    { path : 'add-programme', component : AddProgrammeComponent },
+    { path : 'add-programme/:id/:name', component : AddProgrammeComponent },
 
 ];

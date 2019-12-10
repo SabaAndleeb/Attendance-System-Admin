@@ -39,7 +39,7 @@ export class AddCourseComponent implements OnInit {
       }
 
       setTimeout(() => {
-        this.alertData = {};
+        this.alertData = undefined;
         if(result.success)
           this.form.reset();
       }, 3000);

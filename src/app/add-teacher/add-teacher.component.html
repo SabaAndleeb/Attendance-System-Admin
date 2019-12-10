@@ -1,3 +1,134 @@
-<p>
-  add-teacher works!
-</p>
+<div class="main-content">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-12" *ngIf="alertData">
+          <app-alert-box [alertData]="alertData"></app-alert-box>
+        </div>
+        <div class="col-md-12">
+            <div class="card">
+              <div class="card-header card-header-primary">
+                  <h4 class="card-title ">New Teacher</h4>               
+              </div>
+              <div class="card-body">
+                <div class="table-responsive">
+                    <form [formGroup]="form">
+                        <div class="form-group">
+                          <label for="firstName" class="text-dark">First Name</label>
+                          <input type="text" class="form-control" formControlName="firstName" placeholder="Enter first name">
+                        </div>
+                        
+                        <div class="form-group">
+                          <label for="lastName" class="text-dark">Last Name</label>
+                          <input type="text" class="form-control" formControlName="lastName" placeholder="Enter last name">
+                        </div>
+  
+                        <div class="form-group">
+                          <label for="email" class="text-dark">Email</label>
+                          <input type="email" class="form-control" formControlName="email" placeholder="Enter email">
+                        </div>
+  
+                        <div class="form-group">
+                          <label for="birthDate" class="text-dark">Birth Date</label>
+                          <input type="date" class="form-control" formControlName="birthDate" placeholder="Enter birth date">
+                        </div>
+  
+                        <div class="form-group">
+                          <label for="contactNumber" class="text-dark">Contact Number</label>
+                          <input type="tel" class="form-control" formControlName="contactNumber" placeholder="Enter contact number">
+                        </div>
+  
+                        <div class="form-row"formGroupName="qualification">
+                          
+                          <div class="form-group col-md-6">
+                            <label for="degree" class="text-dark">Degree</label>
+                            <input type="text" class="form-control" formControlName="degree" placeholder="Enter degree">
+                          </div>
+                          
+                          <div class="form-group col-md-6">
+                            <label for="degree" class="text-dark">Programme</label>
+                            <input type="text" class="form-control" formControlName="programme" placeholder="Enter programme">
+                          </div>                          
+                        </div>  
+
+                        <div formGroupName="location">
+                            <div class="form-group">
+                              <label for="city" class="text-dark">City</label>
+                              <select class="form-control" formControlName="city">
+                                <option value="islamabad" selected>Islamabad</option>
+                                <option value="rawalpindi">RawalPindi</option>
+                              </select>
+                            </div>
+      
+      
+                            <div class="form-group">
+                              <label for="programme" class="text-dark">Address</label>
+                              <input type="text" class="form-control" formControlName="address" placeholder="Enter address">
+                            </div>
+  
+                          </div>  
+
+
+                          <div class="form-group">
+                            <label for="programme" class="text-dark">Joining Date</label>
+                            <input type="date" class="form-control" formControlName="joiningDate" placeholder="Enter joining date">
+                          </div>
+
+                          <div class="form-group">
+                            <label for="programme" class="text-dark">Salary</label>
+                            <input type="number" class="form-control" formControlName="salary" placeholder="Enter salary">
+                          </div>
+
+                          <div class="row">
+                              <div class="col-md-12">
+                                  <div class="card">
+                                      <div class="card-header card-header-primary">
+                                          <h4 class="card-title ">Courses</h4>
+                                          <p class="card-category"> Select courses from the following list for this teacher.</p>
+                                      </div>
+                                      <div class="card-body">
+                                          <div class="table-responsive">
+                                              <table class="table text-center" *ngIf="courses | async">
+                                                  <thead class=" text-primary">
+                                                      <th>
+                                                        ID
+                                                      </th>
+                                                      <th>
+                                                        Name 
+                                                      </th>    
+                                                      <th>
+                                                        Add/Remove
+                                                      </th>                  
+                                                  </thead>
+    
+                                                  <tbody class="text-center">
+                                                      <tr formArrayName="assignedCourses" *ngFor="let course of (courses | async)?.response; let i=index;">
+                                                          <td>
+                                                              {{ i + 1 }}
+                                                          </td>
+                                                          <td>
+                                                              {{course?.name }}
+                                                          </td>
+                                                          <td>
+                                                            <input type="checkbox" [value]="course?._id" (change)="onCheckChange($event)">
+                                                        </td>
+                                                      </tr>
+                                                  </tbody>
+                                              </table>
+                                          </div>
+                                      </div>
+                                  </div>
+                              </div>        
+                          </div>
+                        
+                        <!-- <pre>{{ form.value | json }}</pre> -->
+                        
+                        <button type="submit" class="btn btn-primary" [disabled]="!form.valid" (click)="addTeacher()">Add</button>
+                      
+                      </form>
+                </div>
+              </div>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>

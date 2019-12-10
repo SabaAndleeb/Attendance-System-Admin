@@ -22,7 +22,6 @@ export class AddStudentComponent implements OnInit {
     this.form = this.formBuilder.group({
       firstName : ['' , Validators.required],
       lastName  : ['' , Validators.required],
-      userName  : ['' , Validators.required],
       email : ['' , Validators.required],
       contactNumber : ['' , Validators.required],
       registrationNum : ['' , Validators.required],
@@ -34,7 +33,7 @@ export class AddStudentComponent implements OnInit {
       }),
       location : this.formBuilder.group({
         country : 'Pakistan',
-        city : ['', Validators.required],
+        city : ['islamabad', Validators.required],
         address : ['' , Validators.required],
       })  
 
@@ -69,8 +68,8 @@ export class AddStudentComponent implements OnInit {
 
 
   addStudent(){
-    const newCourse = this.operationsService.postOperation('add-student' , this.form.value);
-    newCourse.subscribe((result : any) => {
+    const newStudent = this.operationsService.postOperation('add-student' , this.form.value);
+    newStudent.subscribe((result : any) => {
       console.log('Student Added Response', result);
       this.alertData = {};
       if(result.success){
@@ -82,7 +81,7 @@ export class AddStudentComponent implements OnInit {
         this.alertData.message = 'Sorry! something went wrong.';
       }
       setTimeout(() => {
-        this.alertData = {};
+        this.alertData = undefined;
         if(result.success)
           this.form.reset();
       }, 3000);

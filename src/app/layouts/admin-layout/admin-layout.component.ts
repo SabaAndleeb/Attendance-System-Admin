@@ -17,7 +17,7 @@ export class AdminLayoutComponent implements OnInit {
   private lastPoppedUrl: string;
   private yScrollStack: number[] = [];
 
-  constructor( public location: Location, private router: Router) {}
+  constructor(private location: Location , private router: Router) {}
 
   ngOnInit() {
       const isWindows = navigator.platform.indexOf('Win') > -1 ? true : false;
@@ -129,7 +129,7 @@ export class AdminLayoutComponent implements OnInit {
       });
   }
   ngAfterViewInit() {
-      this.runOnRouteChange();
+    this.runOnRouteChange();
   }
   isMaps(path){
       var titlee = this.location.prepareExternalUrl(this.location.path());
